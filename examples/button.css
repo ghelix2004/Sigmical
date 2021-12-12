@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap");
+
 * {
   box-sizing: border-box;
   -webkit-box-sizing: border-box;
@@ -14,13 +15,13 @@ html {
 body {
   font-family: 'Nunito', sans-serif;
   height: 96%;
-  font-size: 20px;
+  font-size: 1 0px;
   background: rgb(255, 255, 255);
 }
 
 /* width */
 ::-webkit-scrollbar {
-  width: 4px;
+  width: 0px;
 }
 
 /* Track */
@@ -62,15 +63,6 @@ body {
   min-height: 85px;
   margin: auto;
   padding: 0px;
-  border: 0px solid #bbb;
-}
-
-#user-input {
-  width: auto;
-  height: auto;
-  margin: auto;
-  padding: 5px;
-  padding-top: 25px;
   border: 0px solid #bbb;
 }
 
@@ -124,7 +116,7 @@ body {
   margin: 0px;
   padding: 0px;
   border: 0px solid #bbb;
-} 
+}
 
 #content-source {
   width: auto;
@@ -142,6 +134,14 @@ body {
   font-size: 14px;
   font-weight: normal;
   color: #53B2C8;
+}
+
+.inf {
+  display: inline-block;
+  color: #0051ff;
+  padding: 3px 3px;
+  box-shadow: 0 0 8px rgba(197, 214, 255, 0.350);
+  border-radius: 6px
 }
 
 #content-info {
@@ -257,19 +257,23 @@ select::-ms-expand {
   background-color: #fff;
   background-image: linear-gradient(to top, #f9f9f9, #fff 33%);
 }
+
 .info_box {
   position: absolute;
   left: 0%;
   text-align: left;
 }
+
 .select select,
 .select::after {
   grid-area: select;
 }
+
 hr {
   color: rgba(177, 30, 30, 0);
   opacity: 0;
 }
+
 .select:not(.select--multiple)::after {
   content: "";
   justify-self: end;

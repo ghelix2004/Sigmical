@@ -1843,7 +1843,7 @@ body {
 
 }
 .gap::before {
-  content: "";  border-radius: 5px;
+  content: "";  
   position: absolute;
   left: 50%;
   top: 0;
@@ -2363,10 +2363,6 @@ button[data-modal][aria-controls]:focus,
   stroke: rgb(255, 255, 255);
   stroke-width: 2;
 }
-
-
-
-
 
 /* Modal SVG (Tesco) loading animation version 2 (overlaid on itself and out of phase) */
 

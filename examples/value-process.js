@@ -80,7 +80,7 @@ var vmol = {
 // Global
 //
 var userInput = document.getElementsByTagName("input")[0].value;
-var userExample = 'C12=CC=CC=C1C3=C(C=CC=C3)C=C2';//'CC(N)CC=O';
+var userExample = 'Ethanol';//'CC(N)CC=O';
 
 //
 // Keyboard Callback
