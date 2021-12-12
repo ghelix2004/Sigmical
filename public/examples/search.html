@@ -1,0 +1,434 @@
+﻿<!DOCTYPE html>
+<meta charset="utf-8">
+
+<head>
+  <meta name="description"
+    content="ChemicalFind - CEF công cụ tra cứu thông tin những nguyên tố, hợp chất và phản ứng hóa học đa dạng">
+  <meta name="keywords"
+    content="chemical, phương trình hóa học, bảng tuần hoàn, công cụ học hóa, hóa học, hóa học thpt, hóa học 12, hóa học 11, hóa học 10, hóa học 9, hóa học 8, hóa học 7, hóa học 6, hóa học, học hóa, chemicalfind, phương trình phản ứng, nguyên tố hóa học">
+  <meta property="og:image" content="./../examples/CEF.jpg">
+  <meta property="og:title"
+    content="ChemicalFind - CEF công cụ tra cứu thông tin những nguyên tố, hợp chất và phản ứng hóa học đa dạng">
+  <meta property="og:description"
+    content="Cung cấp đầy đủ thông tin hóa học hơn 15000 hợp chất hữu cơ khác nhau, đầy đủ các nguyên tố hóa học và các phương trình phản ứng.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CEF - Tra Cứu Hóa Học</title>
+  <link rel="icon" type="image/svg" href="./../examples/ChemicalFInd.svg" />
+  <link rel="stylesheet" type="text/css" href="./../dist/molecules.css">
+  <link rel="stylesheet" type="text/css" href="./../examples/button.css">
+  <script src="./../dist/molecules.min.js"></script>
+  <script>
+    userlist: load = [];
+  </script>
+  <include src="./../iframe1.html"></include>
+  <script src="./../examples/connect.js"></script>
+  <script src="./../examples/value.js"></script>
+  <script src='./../examples/loading.js'></script>
+  <script src="./../lib/d3.min.js"></script>
+  <script src="https://kit.fontawesome.com/3a8687945d.js" crossorigin="anonymous"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+  </script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+  </script>
+    <link rel="stylesheet" href="./autoComplete.min.css">
+
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap" rel="stylesheet">
+</head>
+<button onclick="topFunction()" id="myBtn" title="Go to top"><i style="z-index: -912349; font-size:25px"
+    class="fas fa-chevron-up"></i></button>
+<script>
+  //Get the button
+  // var mybutton = document.getElementById("myBtn");
+
+  // When the user scrolls down 20px from the top of the document, show the button
+  //window.onscroll = function() {scrollFunction()};
+
+  /* function scrollFunction() {
+     if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+       mybutton.style.display = "block";
+     } else {
+       mybutton.style.display = "none";
+     }
+   }
+   
+   // When the user clicks on the button, scroll to the top of the document
+   function topFunction() {
+       window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
+   }*/
+</script>
+
+</head>
+
+<body>
+  <header style="position: relative;">
+    <div style="display: inline-block; margin-right: 0px;">
+
+    </div>
+  </header>
+  <div id="wrapper">
+
+    <div id="header">
+      <head>
+          </head>
+    
+        <div class="autoComplete_wrapper">
+            <input id="autoComplete" type="search" dir="ltr" spellcheck=false autocorrect="off" autocomplete="off" autocapitalize="off" onpaste="parseInput(this.value)">
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.6/dist/autoComplete.min.js"></script>
+        <script>
+            const autoCompleteJS = new autoComplete({
+                selector: "#autoComplete",
+                placeHolder: "Nhập tên hợp chất hóa học",
+                data: {
+                    src: load,
+                    cache: true,
+                },
+                resultsList: {
+                    element: (list, data) => {
+                        if (!data.results.length) {
+                            // Create "No Results" message element
+                            const message = document.createElement("div");
+                            // Add class to the created element
+                            message.setAttribute("class", "no_result");
+                            // Add message text content
+                            message.innerHTML = `<span>Found No Results for "${data.query}"</span>`;
+                            // Append message element to the results list
+                            list.prepend(message);
+                        }
+                    },
+                    noResults: true,
+                },
+                resultItem: {
+                    highlight: true
+                },
+                events: {
+                    input: {
+                        selection: (event) => {
+                            const selection = event.detail.selection.value;
+                            autoCompleteJS.input.value = selection;
+                            parseInput(selection);
+                          }
+                    }
+                }
+            });
+        </script>
+           <div id="examples">
+        <!--
+<label for="standard-select">Standard Select</label>
+<div class="select">
+  <select id="standard-select">
+    <option value="Option 1">Option 1</option>
+    <option value="Option 2">Option 2</option>
+    <option value="Option 3">Option 3</option>
+    <option value="Option 4">Option 4</option>
+    <option value="Option 5">Option 5</option>
+    <option value="Option length">Option that has too long of a value to fit</option>
+  </select>
+  <span class="focus"></span>
+</div>
+
+            <p class="examples" style="font-family: Roboto; color:white;font-size:15px">Ví dụ:&nbsp
+              <style>
+                  .ad:hover{
+                      opacity: 0.8;
+                  }
+                  .ad{
+                    color:white; padding: 4px 4px; box-shadow: 0 0 8px rgba(197, 213, 255, 0.350);border-radius: 6px;background:linear-gradient( to right, #2e82ff, #2e70ff); 
+                  }
+              </style>
+              
+		            <a draggable="false"  class="ad" style="color:white" href="#" onclick="parseInput('NC(CCC(N)=O)C(O)=O')"; style="color:linear-gradient( to right,#005ce6, #2EABFF);">Glutamin</a>
+                <a draggable="false" class="ad" style="color:white;" href="#"  onclick="parseInput('c1ccccc1')"; style="color:linear-gradient( to right, #005ce6, #2EABFF);">Benzen</a>
+                <a draggable="false" class="ad" style="color:white;" href="#" onclick="parseInput('O[C@H]1[C@H](O)[C@H](O[C@]1(O)CO)CO')"; style="color:linear-gradient( to right, #3dfffc, #2EABFF);">Fructozơ</a>
+                <a draggable="false" class="ad" style="color:white;" href="#" onclick="parseInput('C=C(C)C=C')"; style="color:linear-gradient( to right, #006fe6, #2EABFF);">Isopren</a>
+                <a draggable="false" class="ad" style="color:white;" href="#" onclick="parseInput('CCO')"; style="color:linear-gradient( to right, #005ce6, #2e70ff);">Rượu etylic</a>
+                <a draggable="false" class="ad" style="color:white;" href="#" onclick="parseInput('C#N')"; style="color:linear-gradient( to right, #2e70ff, #2e70ff);">Axit xianhiđric</a>
+                <a draggable="false" class="ad" style="color:white;" href="#" onclick="parseInput(randomMolecule[Math.floor(Math.random()*randomMolecule.length)])"; style="color:#ff9933;">Chất ngẫu nhiên</a>
+     -->
+        <style>
+          .info_box {
+            position: absolute;
+            left: 0%;
+            text-align: left;
+          }
+        </style>
+        <div id="content-info" class="info_box">
+
+          <div class="card border-primary mb-3" style="max-width: 50%; min-width: 200px">
+            <div class="card-header" style="font-weight: bold; color: #0051ff;">Thông tin hợp chất</div>
+            <div class="card-body text-primary">
+              <b>Ký pháp: <div class="inf"
+                  style="display: inline-block;color: #0051ff;padding: 3px 3px; box-shadow: 0 0 8px rgba(197, 214, 255, 0.350);border-radius: 6px;background: rgba(255, 255, 255, 0.884);"
+                  id="iupac_name"></div></b>
+              <br>
+              <b>Công thức cấu tạo: <div class="inf"
+                  style="display: inline-block;color: #0051ff;padding: 3px 3px; box-shadow: 0 0 8px rgba(197, 214, 255, 0.350);border-radius: 6px;background: rgba(255, 255, 255, 0.884);"
+                  id="molecularFormula"></div>
+              </b>
+              <br>
+              <b>Khối lượng phân tử: <div class="inf"
+                  style="display: inline-block;color: #0051ff;padding: 3px 3px; box-shadow: 0 0 8px rgba(197, 214, 255, 0.350);border-radius: 6px;background: rgba(255, 255, 255, 0.884);"
+                  id="molecularWeight"></div>
+              </b> </div>
+            <button id="expand_btn" type="button" class="btn btn-primary"
+              style="text-align:center; z-index:99; width: 100%; border-radius: 0;">Mở rộng thông tin <i class="fas fa-angle-down"></i></button>
+            <iframe style="border: 10px;display: none;z-index:99;" id="myFrame1" height="450px"
+              width="100%"></iframe>
+          </div>
+          <div class="card border-primary mb-3" style="max-width: 50%; min-width: 200px">
+            <div class="card-header" style="font-weight: bold; color: #0051ff;">Tài liệu nghiên cứu</div>
+            <div class="card-body text-primary">
+              <h5 class="card-title">Emded from Google Drive</h5>
+              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            </div>
+          </div>        </div>
+
+        </p>
+      
+      </div>
+      
+      <style>
+        hr {
+          color: rgba(177, 30, 30, 0);
+          opacity: 0;
+        }
+      </style>
+    </div>
+    <script>   sessionStorage.setItem("switch", 1);
+
+      document.getElementById("expand_btn").onclick = function () {
+        if (sessionStorage.getItem("switch") == "1") {
+          sessionStorage.setItem("switch", 0);
+          document.getElementById("myFrame1").style.display = "block";
+          document.getElementById("expand_btn").innerHTML = "Thu gọn thông tin <i class='fas fa-angle-up'></i>";
+        } else {
+          sessionStorage.setItem("switch", 1);
+          document.getElementById("myFrame1").style.display = "none";
+          document.getElementById("expand_btn").innerHTML = "Mở rộng thông tin <i class='fas fa-angle-down'></i>";
+        }
+      }
+    </script>
+    <div>
+    </div>
+
+    <div id="content-main">
+
+      <div id="plot"></div>
+
+      <div id="sidebar">
+        <section>
+          <div id="formatOptions"></div>
+        </section>
+      </div>
+
+    </div>
+
+    <div id="footer">
+      <!--
+<div id="content-source" style="display: inline-block; position: absolute; bottom: 100%; left:0;">
+  <main class=-modal>
+    
+  <a draggable="false" style="padding: 5px 5px;box-shadow: 0 0 8px rgba(197, 213, 255, 0.350);border-radius: 6px;background:linear-gradient( to right, #2e82ff, #2e70ff);" class="lnk_modal-open" data-modalTitle="" data-modalDesc="" href="../examples/FindDict.html" data-modal="../examples/FindDict.html">
+    <div style="color:white; font-size:14px;padding: 5px 5px; "><i class="fas fa-book" aria-hidden="true"></i><b> Chuyển đổi SMILES & IUPAC</b></div>
+  </a>
+  <a draggable="false" style="padding: 5px 5px;box-shadow: 0 0 8px rgba(197, 213, 255, 0.350);border-radius: 6px;background:linear-gradient( to right, #2e82ff, #2e70ff);" class="lnk_modal-open" data-modalTitle="" data-modalDesc="" href="../examples/Periodic.html" data-modal="../examples/Periodic.html">
+    <div style="color:white; font-size:14px;padding: 5px 5px; "><i class="fas fa-atom"></i><b> Bảng tuần hoàn</b></div>
+  </a>
+  
+  <a draggable="false" style=" padding: 5px 5px;box-shadow: 0 0 8px rgba(197, 214, 255, 0.350);border-radius: 6px;background:linear-gradient( to right, #2e82ff, #2e70ff);" class="lnk_modal-open" data-modalTitle="" data-modalDesc="" href="../examples/EQ/index.html" data-modal="../examples/EQ/index.html">
+    <div style="color:white; font-size:14px; padding: 5px 5px;"><i class="fas fa-vial"></i> <b> Phản ứng hóa học</b></div>
+  </a>
+      <a draggable="false" style="padding: 5px 5px;box-shadow: 0 0 8px rgba(197, 213, 255, 0.350);border-radius: 6px;background:linear-gradient( to right, #2e82ff, #2e70ff);" class="lnk_modal-open" data-modalTitle="" data-modalDesc="" href="../examples/Update.html" data-modal="../examples/Update.html">
+        <div style="color:white; font-size:14px;padding: 5px 5px; "><i class="fas fa-globe-asia"></i><b> Thông tin phần mềm</b></div>
+      </a>
+      </p>
+    
+    </main>
+    
+    <svg style="display:none">
+      <defs>
+        <symbol viewBox="0 0 38 38" id="icon-cross">
+          <path d="M19 17.6l5.3-5.4 1.4 1.4-5.3 5.4 5.3 5.3-1.4 1.4-5.3-5.3-5.3 5.3-1.4-1.4 5.2-5.3-5.2-5.3 1.4-1.4 5.3 5.3z" />
+        </symbol>
+        <symbol viewBox='0 0 150 130' id="icon-loading">
+          <title>Loading</title>
+          <path d="M2,99V35.8L55.7,4.2 109.4,35.8V99L55.7,130.6Z"/>
+          <circle cx="55.7" cy="67.4" r="39"/>
+        </symbol>
+      </defs>
+    </svg>
+</div>  
+</div>-->
+      <style>
+        .space_jam {
+          height: 10%;
+        }
+      </style>
+      <div class="space_jam"></div>
+
+      <style>
+        .frames::-webkit-scrollbar {
+          width: 10px;
+        }
+
+        /* Track */
+        .frames::-webkit-scrollbar-track {
+          background: #0084ffe5;
+        }
+
+        /* Handle */
+        .frames::-webkit-scrollbar-thumb {
+          background: rgb(255, 255, 255);
+        }
+
+        /* Handle on hover */
+        .frames::-webkit-scrollbar-thumb:hover {
+          background: #ffffffaf;
+        }
+      </style>
+      <iframe style="border: 10px;display: none;" id="myFrame2" height="500" width="100%"></iframe>
+      <iframe style="border: 10px;display: none;" id="myFrame3" height="500" width="100%"></iframe>
+
+
+    </div>
+    <div>
+      <article>
+        <style>
+          .neonText {
+            color: #fff;
+            text-shadow:
+              0 0 1.5px #6BE774, 0 0 2.5px #16a2f9;
+
+          }
+        </style>
+        <script>
+          var d = ["th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th"];
+        </script>
+      </article>
+</body>
+
+<script>
+  function autocomplete(inp, arr) {
+    /*the autocomplete function takes two arguments,
+    the text field element and an array of possible autocompleted values:*/
+    var currentFocus;
+    /*execute a function when someone writes in the text field:*/
+    inp.addEventListener("input", function (e) {
+      var a, b, i, val = this.value;
+      /*close any already open lists of autocompleted values*/
+      closeAllLists();
+      if (!val) {
+        return false;
+      }
+      currentFocus = -1;
+      /*create a DIV element that will contain the items (values):*/
+      a = document.createElement("DIV");
+      a.setAttribute("id", this.id + "autocomplete-list");
+      a.setAttribute("class", "autocomplete-items");
+      a.setAttribute("style", "z-index:999999");
+      /*append the DIV element as a child of the autocomplete container:*/
+      this.parentNode.appendChild(a);
+      /*for each item in the array...*/
+      for (i = 0; i < arr.length; i++) {
+        /*check if the item starts with the same letters as the text field value:*/
+        if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+          /*create a DIV element for each matching element:*/
+          b = document.createElement("DIV");
+          /*make the matching letters bold:*/
+          b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+          b.innerHTML += arr[i].substr(val.length);
+          /*insert a input field that will hold the current array item's value:*/
+          b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+          /*execute a function when someone clicks on the item value (DIV element):*/
+          b.addEventListener("click", function (e) {
+            /*insert the value for the autocomplete text field:*/
+            inp.value = this.getElementsByTagName("input")[0].value;
+            parseInput(inp.value);
+            /*close the list of autocompleted values,
+            (or any other open lists of autocompleted values:*/
+            closeAllLists();
+          });
+          a.appendChild(b);
+        }
+      }
+    });
+    /*execute a function presses a key on the keyboard:*/
+    inp.addEventListener("keydown", function (e) {
+      var x = document.getElementById(this.id + "autocomplete-list");
+      if (x) x = x.getElementsByTagName("div");
+      if (e.keyCode == 40) {
+        /*If the arrow DOWN key is pressed,
+        increase the currentFocus variable:*/
+        currentFocus++;
+        /*and and make the current item more visible:*/
+        addActive(x);
+      } else if (e.keyCode == 38) { //up
+        /*If the arrow UP key is pressed,
+        decrease the currentFocus variable:*/
+        currentFocus--;
+        /*and and make the current item more visible:*/
+        addActive(x);
+      } else if (e.keyCode == 13) {
+        /*If the ENTER key is pressed, prevent the form from being submitted,*/
+        e.preventDefault();
+        if (currentFocus > -1) {
+          /*and simulate a click on the "active" item:*/
+          if (x) x[currentFocus].click();
+        }
+      }
+    });
+
+    function addActive(x) {
+      /*a function to classify an item as "active":*/
+      if (!x) return false;
+      /*start by removing the "active" class on all items:*/
+      removeActive(x);
+      if (currentFocus >= x.length) currentFocus = 0;
+      if (currentFocus < 0) currentFocus = (x.length - 1);
+      /*add class "autocomplete-active":*/
+      x[currentFocus].classList.add("autocomplete-active");
+    }
+
+    function removeActive(x) {
+      /*a function to remove the "active" class from all autocomplete items:*/
+      for (var i = 0; i < x.length; i++) {
+        x[i].classList.remove("autocomplete-active");
+      }
+    }
+
+    function closeAllLists(elmnt) {
+      /*close all autocomplete lists in the document,
+      except the one passed as an argument:*/
+      var x = document.getElementsByClassName("autocomplete-items");
+      for (var i = 0; i < x.length; i++) {
+        if (elmnt != x[i] && elmnt != inp) {
+          x[i].parentNode.removeChild(x[i]);
+        }
+      }
+    }
+    /*execute a function when someone clicks in the document:*/
+    document.addEventListener("click", function (e) {
+      closeAllLists(e.target);
+    });
+  }
+
+  /*An array containing all the country names in the world:*/
+  /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
+  var data2 = [];
+  for (var id = 0; id < 7500; id++) {
+    data2.push(load[id]);
+  }
+  autocomplete(document.getElementById("myInput"), data2);
+</script>
+<script src="./../examples/connect.js"></script>
+<script src="./../examples/value-process.js"></script>
+<script src="./../examples/ip.js"></script>
