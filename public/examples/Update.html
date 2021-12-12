@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+
+  <meta charset="UTF-8">
+  <script src="https://kit.fontawesome.com/3a8687945d.js" crossorigin="anonymous"></script>
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/modern-normalize/0.5.0/modern-normalize.min.css'>
+ <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Shadows+Into+Light'><link rel="stylesheet" href="./style.css">
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+ <title>CEF - Thông Tin Sản Phẩm</title>
+<link rel="icon" type="image/svg" href="./../examples/ChemicalFInd.svg"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@900&display=swap" rel="stylesheet">
+<style>
+         
+/* Modal opening object (link, button, or pretend button) */
+
+/* Modal opening object (link, button, or pretend button) */
+
+button,
+[aria-role="button"] {
+  cursor: pointer;
+}
+button[data-modal][aria-controls],
+[aria-role="button"][data-modal][aria-controls] {
+  transition: all .3s ease-out;
+}
+
+/* Hover & focus indication. */
+
+/* Reads as: if button, or aria-role=button, has data-model attribute and JavaScript has added aria-controls then on hover or focus */ 
+
+button[data-modal][aria-controls]:hover,
+button[data-modal][aria-controls]:focus,
+[aria-role="button"][data-modal][aria-controls]:hover,
+[aria-role="button"][data-modal][aria-controls]:focus {
+    opacity:0.75;
+    -webkit-filter: contrast(120%);
+}
+
+
+/* Modal opening link cosmetics */
+
+.lnk_modal-open {
+  font-size: larger;border-radius: 10px;
+  background-color: #000;
+  display: inline-block;
+  text-decoration: none;
+  border: 0 solid;
+  margin: 0 auto;
+}
+
+.lnk_modal-img {
+  padding: 0;
+}
+
+.lnk_modal-open:active {
+  -webkit-filter: brightness(85%);
+  filter: brightness(85%);
+}
+
+.img_modal-open {
+  display: block;
+  border: 0 solid;
+}
+
+
+/* The modal section is added via JS */
+
+.modal {border-radius: 10px;
+  max-width: 100%;
+  max-height: 100%;
+  background-color: #000524;
+  margin: 0 auto;
+  position: absolute;
+  left: 2.5%;
+  right: 2.5%;
+  top: 5%;
+  bottom: 5%;
+  z-index: 10;
+  border: 1px solid #000;
+  box-shadow: 0 .25em .5em #000;
+  transition: opacity .5s ease-out, visibility 0s ease-out 1s, transform .5s ease-out .5s;
+  backface-visibility: hidden;
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(.8) translate3d(0,0,0);
+  pointer-events: none;
+}
+
+.modal[aria-hidden="false"] {
+  position: fixed;
+  transition-delay: 0s,0s, 0s;
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1) translate3d(0,0,0);
+  pointer-events: auto;
+}
+
+
+
+
+/* Light box properties */
+
+.modal_lightbox {
+  text-indent: -200em;
+  background-color: rgba(0, 0, 0, 0.8);
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;border-radius: 10px;
+  bottom: 0;
+  right: 0;
+  /* places the modal overlay between the main page (0) and the modal dialog (10) */
+  z-index: 5;
+  cursor: pointer;
+  transition: opacity .5s ease-out, visibility 0s ease-out .5s;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.modal_lightbox-on {
+  transition-delay: 0s, 0s;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+.modal_lightbox-on:hover {
+  /* Stolen from trickle.js. Under consideration. SVGs will not work here */
+ }
+
+
+/* Modal title and description */
+
+.modal_title,
+.modal_desc {
+  position: absolute;
+  top: 5px;
+  border-radius: 10px;
+  left: -200em;
+  background-color: #fff;
+  color: #000;border-radius: 10px;
+  text-shadow: 0 0 0 #fff;
+  font-size: 20px;
+  padding: 0.125em .25em;
+  /* Tesco requirement
+  font-family: Tesco_W_Rg, sans-serif; */
+  margin: 0;
+}
+
+.modal_title:focus,
+.modal_desc:focus {
+  left: 5px;
+}
+
+[aria-hidden="false"] .modal_title {
+  transition: opacity .2s ease-out 1s;
+  opacity: 0;
+}
+
+.modal_title,
+.modal_title:focus {
+  opacity: 1;
+  transition: opacity .5s ease-out;
+}
+
+
+/* The iframe */
+
+.modal_iframe {
+  transition: opacity .5s ease-out, visibility 0s ease-out 1s;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.modal_iframe-on {
+  transition: opacity .8s ease-out, visibility 0s ease-out 0s;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+[aria-hidden="true"] .modal_iframe {
+  display: none;
+}
+
+[aria-hidden="false"] .modal_iframe {
+  display: block;
+}
+
+
+/* The modal pop-ups close button, appears last in the modal, but is moved visually to the top right of the pop-up */
+
+.modal_lnk-close {
+  cursor: pointer;
+  position: absolute;
+  top: -20px;
+  right: -20px;
+  border: 0 solid;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  background-color: rgb(121, 121, 121);
+  box-shadow: 0 .25em .5em rgba(255, 255, 255, 0.329);
+  overflow: hidden;
+  transition: background-color .3s ease-out;
+}
+
+.modal_lnk-close:hover,
+.modal_lnk-close:active,
+.modal_lnk-close:focus {
+  background-color: rgb(22, 115, 221);
+  outline: 0 solid;
+  color:rgb(255, 255, 255);
+}
+
+.svg-close {
+  pointer-events: none;
+  width: 40px;
+  height: 40px;
+  stroke: rgb(255, 255, 255);
+  stroke-width: 2;
+}
+
+
+
+/* Modal SVG (Tesco) loading animation version 2 (overlaid on itself and out of phase) */
+
+[class*="svg-loading"] {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  top: calc(50% - 40px);
+  left: calc(50% - 40px);
+  z-index: -1;
+  transition: opacity .3s ease-out;
+  backface-visibility: hidden;
+}
+
+.svg-loading {
+    fill:#000524;
+  -webkit-animation: rotate 2.5s linear 0s infinite;
+  animation: rotate 4s linear 0s infinite;
+}
+
+.svg-loading2 {
+  /* Match to .modal background colour for full effect */
+  fill: #00ff9a;
+  -webkit-animation: rotate 5s linear 1s infinite;
+  animation: rotate 5s linear 1s infinite;
+}
+
+@-webkit-keyframes rotate {
+  to {
+    -webkit-transform: rotate(360deg) translate3d(0,0,0);
+    transform: rotate(360deg) translate3d(0,0,0);
+  }
+}
+
+@keyframes rotate {
+  to {
+    -webkit-transform: rotate(360deg) translate3d(0,0,0);
+    transform: rotate(360deg) translate3d(0,0,0);
+  }
+}
+
+
+
+/* While modal is open */
+
+/* Class added to body tag to prevent scroll
+   Note the body does not require class "-modal" */
+body.-modal-open {
+  overflow: hidden;
+}
+
+
+/* Any tags classed with "-modal", when open, get "-modal-open" added */
+/* Both of these are equivalent, best practice to use the attribute version which enforces accessibility */
+
+.-modal[aria-hidden="true"] {
+  -webkit-filter: blur(4px);
+  filter: blur(4px);
+}
+.-modal.-modal-open {
+  -webkit-filter: blur(4px);
+  filter: blur(4px);
+}
+
+
+/* Generic helper style */
+.u-margin2 {
+  margin: 2rem 0;
+}
+  body {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #01102c;
+  padding: 50px 30px;
+}
+
+.notepad {
+  width: 100%;
+  max-width: 100%;
+  box-shadow: 10px 10px 40px rgba(233, 233, 233, 0.227);
+  border-radius: 0 0 10px 10px;
+  overflow: hidden;
+}
+
+.top {
+  width: 100%;
+  height: 50px;
+  background: linear-gradient( to right,#3156D3, #05c5ff);
+  border-radius: 5px 5px 0 0;
+}
+
+.paper {
+  width: 100%;
+  height: 150%;
+  min-height: 60vh;
+  padding: 35px 20px;
+  font-family: "verdana", cursive;
+  line-height: 32px;
+  outline: 0;
+  font-size: 22px;
+}
+  .button {
+  background-color: #4287f5;
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  text-align: center;
+  font-size: 16px;
+  margin: 4px 2px;
+  opacity: 1;
+  transition: 0.3s;
+  display: inline-block;
+  text-decoration: none;
+  cursor: pointer;
+}
+article {
+  background: linear-gradient(
+    to right, 
+    hsl(98 100% 62%), 
+    hsl(204 100% 59%)
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-align: center;
+}
+
+h1 {
+  font-size: 10vmin;
+  line-height: 1.1;
+}
+
+body {
+  box-sizing: border-box;
+  place-content: center;
+  font-family: system-ui;
+}
+
+h1, p, body {
+  margin: 0;
+}
+/* width */
+::-webkit-scrollbar {
+  width: 10px; 
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #0084ffe5;  
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgb(255, 255, 255);  border-radius: 5px;
+  margin-bottom: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #ffffffaf; 
+  border-radius: 5px;
+}
+p {
+  font-family: "Dank Mono", ui-monospace, monospace;
+}
+
+html {
+  block-size: 100%;
+  inline-size: 100%;
+}
+.button:hover {opacity: 0.8}
+.button {background-color: #3056d1;}
+</style>
+</head>
+<body>
+<div class="notepad"> 
+  <div style="font-family: Segoe UI; text-align: center; font-size:27.8px; color:#fbfdff"><img style="display:inline-block" width=9.75% height=9.75% src="./../examples/ChemicalFInd.png"/></div>
+  <div class="top"> 
+  <div style="color:rgb(255, 255, 255); text-align: center;  height: 200px; padding:27px 0; font-size:20px; font-family: verdana">
+    <i class="fas fa-file-alt"></i> Thông tin phần mềm
+  </div>
+  </div>
+  <div class="paper" contenteditable="false"><div style="color:#32a856;">
+ <div id="content-source">
+      <main class=-modal>
+      <button style="background:linear-gradient( to right, #2e82ff, #2e70ff);" class="lnk_modal-open" data-modalTitle="" data-modalDesc="https://onedrive.live.com/embed?cid=2508C69801C99D9A&resid=2508C69801C99D9A%2112007&authkey=AF0clU1ubJWRU4g&em=2" href="https://drive.google.com/drive/folders/1fsH3PRB4JOXLtS7-s4nysEu4wBniCNfQ?usp=sharing" data-modal="https://onedrive.live.com/embed?cid=2508C69801C99D9A&resid=2508C69801C99D9A%2112007&authkey=AF0clU1ubJWRU4g&em=2">
+        <div style="color:white; font-size:16px; padding: 10px 18px; "><i class="fab fa-google-drive"></i> Tài liệu</div>
+      </button>
+      <button style="background:linear-gradient( to right, #2e82ff, #2e70ff);" class="lnk_modal-open" data-modalTitle="" data-modalDesc="https://onedrive.live.com/embed?cid=2508C69801C99D9A&resid=2508C69801C99D9A%2111977&authkey=AD9hKBAxWD8c44E" href="https://onedrive.live.com/embed?cid=2508C69801C99D9A&resid=2508C69801C99D9A%2111977&authkey=AD9hKBAxWD8c44E" data-modal="https://onedrive.live.com/embed?cid=2508C69801C99D9A&resid=2508C69801C99D9A%2111977&authkey=AD9hKBAxWD8c44E">
+        <div style="color:white; font-size:16px; padding: 10px 18px;"><i class="fas fa-photo-video"></i> Video hướng dẫn</div>
+      </button>
+        </main>
+        
+        <svg style="display:none">
+          <defs>
+            <symbol viewBox="0 0 38 38" id="icon-cross">
+              <path d="M19 17.6l5.3-5.4 1.4 1.4-5.3 5.4 5.3 5.3-1.4 1.4-5.3-5.3-5.3 5.3-1.4-1.4 5.2-5.3-5.2-5.3 1.4-1.4 5.3 5.3z" />
+            </symbol>
+            <symbol viewBox='0 0 150 130' id="icon-loading">
+              <title>Loading</title>
+              <path d="M2,99V35.8L55.7,4.2 109.4,35.8V99L55.7,130.6Z"/>
+              <circle cx="55.7" cy="67.4" r="39"/>
+            </symbol>
+          </defs>
+        </svg>
+  </div>
+  <script src="./../examples/ip.js"></script>
+  </div>
+    <div style="color:#02c9bf;"><u>12/07/21: Release version</u></div>
+    <div style="text-align: center;"><img width=522px; height=404px src="https://github.com/ghelix2004/TraCuuHoaHoc/raw/master/Chemical%20(4).png"></img></div>
+<li style="color: #05c5ff;"> Gồm 2 chức năng: Hướng dẫn cách viết SMILES và Chuyển đổi IUPAC và SMILES    <div style="text-align: center;"><img width=522px; height=404px src="https://github.com/ghelix2004/TraCuuHoaHoc/raw/master/Intro.png"></img></div>    <div style="text-align: center;"><img width=525px; height=410x src="https://github.com/ghelix2004/TraCuuHoaHoc/raw/master/Convert.png"></img></div>
+</li>
+<div style="color:#428af5"><u>28/07/21: Cập nhật phiên bản | Update #1</u></div>
+<li style="color: #05c5ff;">Bổ sung Update Logs - Ghi chú phiên bản</li>
+<div style="color:#f54242"><u>05/08/21: Phiên bản mới nhất | Lastest Update #2</u></div>
+        <div style="text-align: center;"><img width=522px; height=404px src="https://github.com/ghelix2004/TraCuuHoaHoc/raw/master/Update2.png"></img>
+</div>
+<li style="color: #05c5ff;">Các chức năng mới: Bảng tuần hoàn nguyên tố, Video hướng dẫn</li>
+</div><div style="text-align: center;"><img width=520px; height=414px src="https://github.com/ghelix2004/TraCuuHoaHoc/raw/master/Periodic.png"></img>
+</div><div style="text-align: center;"><img width=522px; height=404px src="https://github.com/ghelix2004/TraCuuHoaHoc/raw/master/Record.png"></img>
+</div>
+<div style="font-family: Roboto; text-align: center; color:#07fd7e"><u>09/27/21: Phiên bản mới nhất | Lastest Update #3</u></div>
+     <p style="color: #05c5ff; font-family: sans-serif; text-align: center;">Cập nhật giao diện, bổ sung chức năng Phương Trình Hóa Học</p>   
+</div>
+</div>
+
+</body>
+</html>

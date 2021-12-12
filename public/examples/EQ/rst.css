@@ -1,0 +1,65 @@
+@import url(https://fonts.googleapis.com/css?family=Open+Sans);
+* {
+  box-sizing: border-box;
+}
+
+.wrapper {
+  position: fixed;
+  align-items: center;
+  top: 150px;
+  padding: 5px;
+  max-width: 1960px;
+  width: 95%;
+  margin: 20px auto;
+}
+
+header {
+  padding: 0 15px;
+}
+
+.columns {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  margin: 5px 0;
+  
+}
+
+.column {
+  flex: 1;
+  border: 2.5px solid rgb(2, 2, 31);background-color: rgb(2, 2, 31); box-shadow: 2.25px 2.25px 0px 0px rgb(3, 39, 89);
+  box-shadow: 1.25px 2.5px 0px 0px rgb(3, 39, 89);
+  border-radius: 15px 15px 15px 15px;
+  margin: 10px;
+  padding: 10px;
+}
+.column:first-child {
+  margin-left: 0; 
+}
+.column:last-child {
+  margin-right: 0;
+}
+
+footer {
+  padding: 0 15px;
+}
+
+@media screen and (max-width: 980px) {
+  .columns .column {
+    margin-bottom: 5px;
+    flex-basis: 40%;
+  }
+  .columns .column:nth-last-child(2) {
+    margin-right: 0;
+  }
+  .columns .column:last-child {
+    flex-basis: 100%;
+    margin: 0;
+  }
+}
+@media screen and (max-width: 680px) {
+  .columns .column {
+    flex-basis: 100%;
+    margin: 0 0 5px 0;
+  }
+}
